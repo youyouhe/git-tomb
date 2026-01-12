@@ -147,6 +147,9 @@ const translations: Record<Language, Record<string, string>> = {
       "share.obituary": "Here lies {name}. Died of {cause}. It was a good project. R.I.P.", // NEW
       "share.image_copied": "Image copied to clipboard!", // NEW
       "share.image_copy_failed": "Copy failed, please try again", // NEW
+      "share.confirm_title": "Share to X?", // NEW
+      "share.confirm_message": "We will generate a tombstone image and open the X share window.", // NEW
+      "share.confirm_cancel": "Cancel", // NEW
 
 
     "ritual.candle": "Lighting Candle (+1)",
@@ -332,6 +335,9 @@ const translations: Record<Language, Record<string, string>> = {
       "share.obituary": "这里躺着 {name}。死于 {cause}。这是一个很好的项目。R.I.P.", // NEW
       "share.image_copied": "图片已复制到剪贴板！", // NEW
       "share.image_copy_failed": "复制失败，请重试", // NEW
+      "share.confirm_title": "分享到 X？", // NEW
+      "share.confirm_message": "我们将生成墓碑图片并打开 X 分享窗口。", // NEW
+      "share.confirm_cancel": "取消", // NEW
 
 
     "ritual.candle": "点亮心灯 (+1)",

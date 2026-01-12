@@ -26,6 +26,7 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
   const [isHeartbeat, setIsHeartbeat] = useState(false);
   const [errorMsg, setErrorMsg] = useState(''); // For local error toasts
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
   const lastPayTime = useRef<number>(0);
   const tombstoneRef = useRef<HTMLDivElement>(null);
 
@@ -83,7 +84,14 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
       }
   };
 
-  const handleShareToX = async () => {
+  const handleShareToX = () => {
+      setShowConfirm(true);
+  };
+
+  const handleConfirmShare = async () => {
+      setShowConfirm(false);
+      await generateTombstoneImage();
+
       const baseUrl = window.location.origin + window.location.pathname;
       const shareUrl = `${baseUrl}?id=${entry.id}`;
       const epitaph = (entry.eulogy?.length > 50) ? entry.eulogy.substring(0, 50) + '...' : (entry.eulogy || '');
@@ -97,8 +105,11 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
       const text = epitaphText + obituaryText;
       const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}&hashtags=GitTomb,IndieDev`;
 
-      await generateTombstoneImage();
       window.open(intent, '_blank');
+  };
+
+  const handleCancelShare = () => {
+      setShowConfirm(false);
   };
 
   const handleRitualClick = async (e: React.MouseEvent, type: RitualType) => {
@@ -468,11 +479,36 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
               </button>
           </div>
 
-          <div className="mt-4 text-xs font-mono text-graveyard-accent/60 flex justify-center uppercase tracking-widest">
-             <span>{t(style.name)}</span>
+           <div className="mt-4 text-xs font-mono text-graveyard-accent/60 flex justify-center uppercase tracking-widest">
+              <span>{t(style.name)}</span>
+           </div>
+         </div>
+       </div>
+
+       {/* Share Confirmation Modal */}
+       {showConfirm && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] animate-fade-in">
+             <div className="bg-graveyard-stone border-4 border-graveyard-accent rounded-lg p-8 max-w-md mx-4 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                 <h3 className="font-pixel text-2xl text-graveyard-highlight mb-4 text-center">{t('share.confirm_title')}</h3>
+                 <p className="font-mono text-graveyard-text mb-6 text-center leading-relaxed">{t('share.confirm_message')}</p>
+                 <div className="flex gap-4 justify-center">
+                     <button
+                           onClick={handleCancelShare}
+                           className="px-6 py-3 font-pixel text-sm border-2 border-graveyard-accent bg-transparent text-graveyard-text hover:bg-graveyard-accent/20 transition-colors"
+                     >
+                           {t('share.confirm_cancel')}
+                     </button>
+                     <button
+                           onClick={handleConfirmShare}
+                           className="px-6 py-3 font-pixel text-sm bg-graveyard-highlight text-black hover:bg-graveyard-highlight/80 transition-colors"
+                     >
+                           OK
+                     </button>
+                 </div>
+             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+       )}
+
+     </div>
+   );
+ };
