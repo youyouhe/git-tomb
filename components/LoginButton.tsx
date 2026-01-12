@@ -1,9 +1,9 @@
-import { signInWithGithub } from '../services/supabaseClient';
+import { signInWithGitHub } from '../services/identityService';
 
 export const LoginButton = ({ variant = 'default' }: { variant?: 'default' | 'compact' }) => {
   const handleSignIn = async () => {
     try {
-      await signInWithGithub();
+      await signInWithGitHub();
     } catch (error) {
       console.error('Sign in error:', error);
     }
