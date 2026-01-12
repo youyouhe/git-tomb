@@ -86,6 +86,7 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
 
   const handleShareToX = async () => {
       await generateTombstoneImage();
+      await new Promise(resolve => setTimeout(resolve, 1000));
       setShowConfirm(true);
   };
 
