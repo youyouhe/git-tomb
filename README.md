@@ -1,7 +1,7 @@
 # Git Tomb 🪦
 
 <div align="center">
-  <img src="shot01.png" alt="Git Tomb Screenshot" />
+  <img src="./shot01.png" alt="Git Tomb Screenshot" />
 </div>
 
 > *R.I.P. to all the projects that never made it past the commit stage.*
