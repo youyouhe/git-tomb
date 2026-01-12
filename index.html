@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repo Graveyard ⚰️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+      /* 
+       * THEME VARIABLES 
+       * Using CSS variables allows switching themes without changing React classNames.
+       */
+      :root {
+        /* Default (Dark) */
+        --bg-dark: #1a1a1a;
+        --bg-stone: #2d2d2d;
+        --text-base: #a0a0a0;
+        --text-highlight: #e0e0e0;
+        --border-accent: #4a4a4a;
+        
+        --scrollbar-track: #1a1a1a;
+        --scrollbar-thumb: #444;
+        --scrollbar-thumb-hover: #555;
+      }
+
+      /* Light Theme Overrides */
+      .light-theme {
+        --bg-dark: #e5e5e5;       /* Light Gray Background */
+        --bg-stone: #ffffff;      /* White Containers */
+        --text-base: #4b5563;     /* Gray-600 Text */
+        --text-highlight: #111827;/* Gray-900 Headings */
+        --border-accent: #d1d5db; /* Light Gray Borders */
+
+        --scrollbar-track: #e5e5e5;
+        --scrollbar-thumb: #9ca3af;
+        --scrollbar-thumb-hover: #6b7280;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-base);
+        font-family: 'VT323', monospace;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Custom scrollbar for that retro feel */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--scrollbar-track); 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb); 
+        border: 2px solid var(--scrollbar-track);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover); 
+      }
+
+      /* Shine Animation Keyframes */
+      @keyframes shine-sweep {
+        0% { transform: translateX(-150%) skewX(-25deg); opacity: 0; }
+        5% { opacity: 1; }
+        40% { opacity: 1; }
+        50% { transform: translateX(250%) skewX(-25deg); opacity: 0; }
+        100% { transform: translateX(250%) skewX(-25deg); opacity: 0; }
+      }
+
+      /* Ritual Animations */
+      @keyframes floatUp {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-60px) scale(1.5); opacity: 0; }
+      }
+
+      @keyframes shake {
+        10%, 90% { transform: translate3d(-1px, 0, 0); }
+        20%, 80% { transform: translate3d(2px, 0, 0); }
+        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+        40%, 60% { transform: translate3d(4px, 0, 0); }
+      }
+
+      @keyframes burn {
+        from { box-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00; }
+        to { box-shadow: 0 0 20px #ff4500, 0 0 30px #ff0000; }
+      }
+
+      @keyframes heartbeat {
+        0% { transform: scale(1); }
+        14% { transform: scale(1.05); }
+        28% { transform: scale(1); }
+        42% { transform: scale(1.05); }
+        70% { transform: scale(1); }
+      }
+      
+      /* Base shine properties */
+      .gold-shine, .silver-shine, .bronze-shine, .iron-shine {
+        position: relative;
+        /* Overflow hidden handled by utility */
+      }
+
+      /* Common pseudo-element setup */
+      .gold-shine::after, .silver-shine::after, .bronze-shine::after, .iron-shine::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 60%;
+        height: 100%;
+        transform: translateX(-150%) skewX(-25deg);
+        animation: shine-sweep 4s infinite linear;
+        pointer-events: none;
+        z-index: 20;
+      }
+      
+      /* Specific Gradients */
+      .gold-shine::after {
+        background: linear-gradient(
+          to right, 
+          transparent 0%, 
+          rgba(255, 215, 0, 0.1) 20%, 
+          rgba(255, 255, 200, 0.5) 50%, 
+          rgba(255, 215, 0, 0.1) 80%, 
+          transparent 100%
+        );
+      }
+
+      .silver-shine::after {
+        background: linear-gradient(
+          to right, 
+          transparent 0%, 
+          rgba(192, 192, 192, 0.1) 20%, 
+          rgba(255, 255, 255, 0.5) 50%, 
+          rgba(192, 192, 192, 0.1) 80%, 
+          transparent 100%
+        );
+      }
+
+      .bronze-shine::after {
+        background: linear-gradient(
+          to right, 
+          transparent 0%, 
+          rgba(205, 127, 50, 0.1) 20%, 
+          rgba(255, 200, 150, 0.4) 50%, 
+          rgba(205, 127, 50, 0.1) 80%, 
+          transparent 100%
+        );
+      }
+
+      .iron-shine::after {
+        background: linear-gradient(
+          to right, 
+          transparent 0%, 
+          rgba(169, 169, 169, 0.05) 20%, 
+          rgba(220, 220, 220, 0.3) 50%, 
+          rgba(169, 169, 169, 0.05) 80%, 
+          transparent 100%
+        );
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'pixel': ['"Press Start 2P"', 'cursive'],
+              'mono': ['"VT323"', 'monospace'],
+            },
+            colors: {
+              graveyard: {
+                // Map Tailwind colors to CSS variables
+                dark: 'var(--bg-dark)',
+                stone: 'var(--bg-stone)',
+                text: 'var(--text-base)',
+                highlight: 'var(--text-highlight)',
+                accent: 'var(--border-accent)'
+              }
+            },
+            animation: {
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float-up': 'floatUp 1.5s ease-out forwards',
+              'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+              'burn': 'burn 0.5s ease-in-out infinite alternate',
+              'heartbeat': 'heartbeat 1s ease-in-out infinite',
+            }
+          }
+        }
+      }
+    </script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.90.1",
+    "@tauri-apps/api/": "https://esm.sh/@tauri-apps/api@^2.9.1/",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

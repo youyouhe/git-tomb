@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Icon Generator</title>
+</head>
+<body>
+<canvas id="canvas" width="512" height="512"></canvas>
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// Background
+ctx.fillStyle = '#1a1a1a';
+ctx.fillRect(0, 0, 512, 512);
+
+// Tombstone
+ctx.fillStyle = '#2d2d2d';
+ctx.fillRect(136, 96, 240, 352);
+ctx.beginPath();
+ctx.arc(256, 96, 120, Math.PI, 0);
+ctx.fill();
+
+// Border
+ctx.strokeStyle = '#4a4a4a';
+ctx.lineWidth = 8;
+ctx.beginPath();
+ctx.moveTo(136, 96);
+ctx.arc(256, 96, 120, Math.PI, 0);
+ctx.lineTo(376, 448);
+ctx.lineTo(136, 448);
+ctx.closePath();
+ctx.stroke();
+
+// Cross
+ctx.fillStyle = '#ffd700';
+ctx.fillRect(246, 136, 20, 140);
+ctx.fillRect(186, 196, 140, 20);
+
+// R.I.P
+ctx.fillStyle = '#e0e0e0';
+ctx.font = 'bold 48px monospace';
+ctx.textAlign = 'center';
+ctx.fillText('R.I.P', 256, 320);
+
+// Download
+canvas.toBlob(function(blob) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'icon.png';
+  a.click();
+});
+</script>
+</body>
+</html>

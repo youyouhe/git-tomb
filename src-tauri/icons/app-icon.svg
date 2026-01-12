@@ -1,0 +1,28 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#1a1a1a"/>
+
+  <!-- Tombstone base -->
+  <rect x="136" y="96" width="240" height="352" fill="#2d2d2d"/>
+
+  <!-- Tombstone top arch -->
+  <path d="M136 96 Q136 32 256 32 Q376 32 376 96" fill="#2d2d2d"/>
+
+  <!-- Border -->
+  <path d="M136 96 Q136 32 256 32 Q376 32 376 96 V448 H136 Z" fill="none" stroke="#4a4a4a" stroke-width="8"/>
+
+  <!-- Top arch border -->
+  <path d="M136 96 Q136 32 256 32 Q376 32 376 96" fill="none" stroke="#4a4a4a" stroke-width="8"/>
+
+  <!-- Cross symbol -->
+  <path d="M246 136 H266 V196 H326 V216 H266 V276 H246 V216 H186 V196 H246 V136 Z" fill="#ffd700"/>
+
+  <!-- R.I.P text -->
+  <text x="256" y="320" font-family="monospace" font-size="48" font-weight="bold" fill="#e0e0e0" text-anchor="middle">R.I.P</text>
+
+  <!-- GitHub code lines -->
+  <rect x="186" y="360" width="140" height="60" rx="8" fill="#404040"/>
+  <line x1="206" y1="380" x2="306" y2="380" stroke="#a0a0a0" stroke-width="4" stroke-linecap="round"/>
+  <line x1="206" y1="400" x2="306" y2="400" stroke="#a0a0a0" stroke-width="4" stroke-linecap="round"/>
+  <line x1="206" y1="390" x2="286" y2="390" stroke="#a0a0a0" stroke-width="4" stroke-linecap="round"/>
+</svg>

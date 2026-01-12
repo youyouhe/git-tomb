@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supabase Test</title>
+</head>
+<body>
+  <h1>Supabase RLS Test</h1>
+  <pre id="result"></pre>
+
+  <script type="module">
+    const SUPABASE_URL = 'https://vbzhpselnugbpjxxewjl.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiemhwc2VsbnVnYnBqeHhld2psIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxMTQ5MDUsImV4cCI6MjA4MzY5MDkwNX0.jBRHss8cbFcEsMsbC6YY_-73pPcsp62nhwSPYVFkyzA';
+
+    const result = document.getElementById('result');
+
+    try {
+      // Test 1: Simple count
+      result.textContent += '\n1. Testing COUNT query...\n';
+      const countResponse = await fetch(`${SUPABASE_URL}/rest/v1/graveyards?select=count`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Accept': 'application/json'
+        }
+      });
+      result.textContent += `Status: ${countResponse.status}\n`;
+
+      const countData = await countResponse.text();
+      result.textContent += `Response: ${countData}\n\n`;
+
+      // Test 2: Select by repo_url
+      result.textContent += '2. Testing SELECT by repo_url...\n';
+      const url = 'https://github.com/youyouhe/live2d-widget';
+      const selectResponse = await fetch(`${SUPABASE_URL}/rest/v1/graveyards?select=id&repo_url=eq.${encodeURIComponent(url)}`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Accept': 'application/json'
+        }
+      });
+      result.textContent += `Status: ${selectResponse.status}\n`;
+
+      const selectData = await selectResponse.text();
+      result.textContent += `Response: ${selectData}\n\n`;
+
+      // Test 3: Check RLS policies via API
+      result.textContent += '3. Testing general SELECT...\n';
+      const generalResponse = await fetch(`${SUPABASE_URL}/rest/v1/graveyards?select=id&limit=1`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Accept': 'application/json'
+        }
+      });
+      result.textContent += `Status: ${generalResponse.status}\n`;
+
+      const generalData = await generalResponse.text();
+      result.textContent += `Response: ${generalData}\n`;
+
+    } catch (error) {
+      result.textContent += `Error: ${error.message}\n`;
+      result.textContent += `Stack: ${error.stack}\n`;
+    }
+  </script>
+</body>
+</html>

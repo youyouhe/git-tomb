@@ -1,0 +1,102 @@
+
+-- 1. 创建祭拜记录表 (允许 user_id 为空以支持匿名用户)
+create table if not exists respects_log (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid, -- 允许为空 (NULL for anonymous)
+  grave_id uuid not null references graveyards(id),
+  ritual_type text not null,
+  power int not null default 1,
+  created_at timestamptz default now()
+);
+
+-- 添加索引以加快查询速度
+create index if not exists idx_respects_log_check on respects_log(user_id, grave_id, created_at);
+
+-- 2. 创建法师数据表 (用于排行榜点赞)
+create table if not exists priest_stats (
+  provider_id text primary key,
+  likes_count int default 0,
+  busy_count int default 0
+);
+
+-- 允许公开读取法师数据
+alter table priest_stats enable row level security;
+
+-- FIX: 先删除旧策略防止报错 "policy already exists"
+drop policy if exists "Public read priest stats" on priest_stats;
+create policy "Public read priest stats" on priest_stats for select using (true);
+
+-- 允许所有用户(包括匿名)插入/更新 (通过下面的函数控制)
+grant all on table priest_stats to anon, authenticated;
+grant all on table respects_log to anon, authenticated;
+
+-- 3. 核心函数: 执行祭拜 (perform_ritual)
+-- 使用 SECURITY DEFINER 以绕过 RLS 限制，确保能更新 graveyards 表
+create or replace function perform_ritual(
+  grave_uuid uuid,
+  user_uuid uuid, -- 如果是匿名，这里传 NULL
+  r_type text,
+  power_val int
+) returns json
+language plpgsql
+security definer 
+as $$
+declare
+  last_visit timestamptz;
+  new_total int;
+begin
+  -- 1. 严格禁止匿名用户祭拜 (New Rule: Login Required)
+  if user_uuid is null then
+     return json_build_object(
+         'success', false, 
+         'message', 'LOGIN_REQUIRED'
+     );
+  end if;
+
+  -- 2. 登录用户逻辑：检查 1 年冷却时间
+  select created_at into last_visit
+  from respects_log
+  where grave_id = grave_uuid and user_id = user_uuid
+  order by created_at desc limit 1;
+
+  -- 如果距离上次祭拜不到 1 年
+  if last_visit is not null and last_visit > (now() - interval '1 year') then
+     return json_build_object(
+         'success', false, 
+         'message', 'ALREADY_PAID', 
+         'next_time', (last_visit + interval '1 year')
+     );
+  end if;
+
+  -- 3. 记录日志
+  insert into respects_log (user_id, grave_id, ritual_type, power)
+  values (user_uuid, grave_uuid, r_type, power_val);
+
+  -- 4. 更新墓碑总分
+  update graveyards
+  set respects_paid = respects_paid + power_val
+  where id = grave_uuid
+  returning respects_paid into new_total;
+
+  return json_build_object('success', true, 'new_count', new_total);
+end;
+$$;
+
+-- 4. 辅助函数: 给法师点赞 (bless_priest)
+-- 原子操作，不存在则插入，存在则+1
+create or replace function bless_priest(provider_id text)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  insert into priest_stats (provider_id, likes_count)
+  values (provider_id, 1)
+  on conflict (provider_id)
+  do update set likes_count = priest_stats.likes_count + 1;
+end;
+$$;
+
+-- 5. 授予权限给 API
+grant execute on function perform_ritual to anon, authenticated;
+grant execute on function bless_priest to anon, authenticated;
