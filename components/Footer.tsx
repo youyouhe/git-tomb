@@ -17,12 +17,12 @@ export const Footer: React.FC = () => {
           <span>{t('footer.toolmaker')}</span>
           
           <div className="flex gap-4 mt-1 opacity-70">
-            <ExternalLink 
-              href="https://github.com/youyouhe/" 
-              className="hover:text-white hover:underline transition-colors"
-            >
-              GitHub
-            </ExternalLink>
+             <ExternalLink
+               href="https://github.com/youyouhe/git-tomb"
+               className="hover:text-white hover:underline transition-colors"
+             >
+               GitHub
+             </ExternalLink>
             <span className="text-graveyard-stone">|</span>
             <ExternalLink 
               href="https://x.com/ChimpanzeeHe" 
