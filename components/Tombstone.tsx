@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { GraveEntry, RITUALS, RitualType } from '../types';
+import { GraveEntry, RITUALS, RitualType, ShareTemplate } from '../types';
 import { useTranslation, useCauseTranslation } from '../i18n';
 import { checkDailyQuota, consumeSoulPower, isAuthenticated, getUndertakerProfile } from '../services/identityService';
 import { performRitual } from '../services/graveyardService';
@@ -27,6 +27,7 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
   const [errorMsg, setErrorMsg] = useState(''); // For local error toasts
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<ShareTemplate>('DEFAULT');
   const lastPayTime = useRef<number>(0);
   const tombstoneRef = useRef<HTMLDivElement>(null);
 
@@ -96,14 +97,46 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
       const baseUrl = window.location.origin + window.location.pathname;
       const shareUrl = `${baseUrl}?id=${entry.id}`;
       const epitaph = (entry.eulogy?.length > 50) ? entry.eulogy.substring(0, 50) + '...' : (entry.eulogy || '');
-      const epitaphText = epitaph ? `${epitaph}
+
+      let text = '';
+
+      switch (selectedTemplate) {
+          case 'HUMOR':
+              text = `帮 @${t('share.handle_placeholder')} 收个尸 🪦
+
+项目：${entry.name}
+死因：${translateCause}
+墓志铭："${epitaph}"
+
+愿它安息。`;
+              break;
+          case 'TRIBUTE':
+              text = `致敬 @${t('share.handle_placeholder')} 的遗作 ${entry.name} 😢
+
+虽然只走了很短的路，但让我们永远记住它。
+
+已安葬于 #GitTomb 永久纪念馆`;
+              break;
+          case 'INVITE':
+              text = `@${t('share.handle_placeholder')} 你的 ${entry.name} 被我找到了！
+
+要来给它献花吗？🕯️
+
+#GitTomb #IndieDev`;
+              break;
+          case 'DEFAULT':
+          default:
+              const epitaphText = epitaph ? `${epitaph}
 
 ` : '';
-      const obituaryText = t('share.obituary', {
-          name: entry.name,
-          cause: translateCause
-      });
-      const text = epitaphText + obituaryText;
+              const obituaryText = t('share.obituary', {
+                  name: entry.name,
+                  cause: translateCause
+              });
+              text = epitaphText + obituaryText;
+              break;
+      }
+
       const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}&hashtags=GitTomb,IndieDev`;
 
       window.open(intent, '_blank');
@@ -111,6 +144,7 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
 
   const handleCancelShare = () => {
       setShowConfirm(false);
+      setSelectedTemplate('DEFAULT');
   };
 
   const handleRitualClick = async (e: React.MouseEvent, type: RitualType) => {
@@ -486,29 +520,62 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
          </div>
        </div>
 
-       {/* Share Confirmation Modal */}
-       {showConfirm && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] animate-fade-in">
-             <div className="bg-graveyard-stone border-4 border-graveyard-accent rounded-lg p-8 max-w-md mx-4 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-                 <h3 className="font-pixel text-2xl text-graveyard-highlight mb-4 text-center">{t('share.confirm_title')}</h3>
-                 <p className="font-mono text-graveyard-text mb-6 text-center leading-relaxed">{t('share.confirm_message')}</p>
-                 <div className="flex gap-4 justify-center">
-                     <button
-                           onClick={handleCancelShare}
-                           className="px-6 py-3 font-pixel text-sm border-2 border-graveyard-accent bg-transparent text-graveyard-text hover:bg-graveyard-accent/20 transition-colors"
-                     >
-                           {t('share.confirm_cancel')}
-                     </button>
-                     <button
-                           onClick={handleConfirmShare}
-                           className="px-6 py-3 font-pixel text-sm bg-graveyard-highlight text-black hover:bg-graveyard-highlight/80 transition-colors"
-                     >
-                           OK
-                     </button>
-                 </div>
-             </div>
-          </div>
-       )}
+        {/* Share Confirmation Modal */}
+        {showConfirm && (
+           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] animate-fade-in">
+              <div className="bg-graveyard-stone border-4 border-graveyard-accent rounded-lg p-8 max-w-lg mx-4 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                  <h3 className="font-pixel text-2xl text-graveyard-highlight mb-4 text-center">{t('share.confirm_title')}</h3>
+                  <p className="font-mono text-graveyard-text mb-4 text-center leading-relaxed">{t('share.confirm_message')}</p>
+
+                  <p className="font-mono text-graveyard-text text-xs mb-2 text-center">{t('share.select_template')}:</p>
+                  <div className="grid grid-cols-2 gap-2 mb-6">
+                      <button
+                          onClick={() => setSelectedTemplate('DEFAULT')}
+                          className={`p-3 text-left border-2 transition-all ${selectedTemplate === 'DEFAULT' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50 hover:bg-graveyard-accent/10'}`}
+                      >
+                          <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_default_title')}</div>
+                          <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_default_desc')}</div>
+                      </button>
+                      <button
+                          onClick={() => setSelectedTemplate('HUMOR')}
+                          className={`p-3 text-left border-2 transition-all ${selectedTemplate === 'HUMOR' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50 hover:bg-graveyard-accent/10'}`}
+                      >
+                          <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_humor_title')}</div>
+                          <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_humor_desc')}</div>
+                      </button>
+                      <button
+                          onClick={() => setSelectedTemplate('TRIBUTE')}
+                          className={`p-3 text-left border-2 transition-all ${selectedTemplate === 'TRIBUTE' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50 hover:bg-graveyard-accent/10'}`}
+                      >
+                          <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_tribute_title')}</div>
+                          <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_tribute_desc')}</div>
+                      </button>
+                      <button
+                          onClick={() => setSelectedTemplate('INVITE')}
+                          className={`p-3 text-left border-2 transition-all ${selectedTemplate === 'INVITE' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50 hover:bg-graveyard-accent/10'}`}
+                      >
+                          <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_invite_title')}</div>
+                          <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_invite_desc')}</div>
+                      </button>
+                  </div>
+
+                  <div className="flex gap-4 justify-center">
+                      <button
+                            onClick={handleCancelShare}
+                            className="px-6 py-3 font-pixel text-sm border-2 border-graveyard-accent bg-transparent text-graveyard-text hover:bg-graveyard-accent/20 transition-colors"
+                      >
+                            {t('share.confirm_cancel')}
+                      </button>
+                      <button
+                            onClick={handleConfirmShare}
+                            className="px-6 py-3 font-pixel text-sm bg-graveyard-highlight text-black hover:bg-graveyard-highlight/80 transition-colors"
+                      >
+                            {t('share.confirm_ok')}
+                      </button>
+                  </div>
+              </div>
+           </div>
+        )}
 
      </div>
    );

@@ -108,6 +108,7 @@ export interface PriestStats {
 
 // --- RITUAL SYSTEM ---
 export type RitualType = 'CANDLE' | 'SALUTE' | 'COFFEE' | 'BUG' | 'FIRE' | 'WAIFU';
+export type ShareTemplate = 'DEFAULT' | 'HUMOR' | 'TRIBUTE' | 'INVITE';
 
 export interface RitualConfig {
     id: RitualType;
