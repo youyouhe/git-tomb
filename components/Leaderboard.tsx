@@ -47,7 +47,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
     const handleShare = (rank: number, count: number) => {
         const text = t('leaderboard.share_msg_rank', { rank: rank, count: count });
         const url = window.location.href;
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&hashtags=RepoGraveyard,IndieDev`;
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&hashtags=GitTomb,IndieDev`;
         window.open(twitterUrl, '_blank');
     }
 
