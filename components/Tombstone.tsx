@@ -84,13 +84,13 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
       }
   };
 
-  const handleShareToX = () => {
+  const handleShareToX = async () => {
+      await generateTombstoneImage();
       setShowConfirm(true);
   };
 
-  const handleConfirmShare = async () => {
+  const handleConfirmShare = () => {
       setShowConfirm(false);
-      await generateTombstoneImage();
 
       const baseUrl = window.location.origin + window.location.pathname;
       const shareUrl = `${baseUrl}?id=${entry.id}`;
