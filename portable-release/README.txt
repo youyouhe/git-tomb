@@ -19,7 +19,7 @@ System Requirements:
 
 License:
 - This project is open source
-- Visit: https://github.com/youyouhe/Repo-Graveyard
+- Visit: https://github.com/youyouhe/git-tomb
 
 Note:
 - This is a portable version - all files are contained in the .exe
