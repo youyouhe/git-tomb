@@ -4,6 +4,7 @@ import { GraveEntry, RITUALS, RitualType } from '../types';
 import { useTranslation, useCauseTranslation } from '../i18n';
 import { checkDailyQuota, consumeSoulPower, isAuthenticated, getUndertakerProfile } from '../services/identityService';
 import { performRitual } from '../services/graveyardService';
+import html2canvas from 'html2canvas';
 
 interface TombstoneProps {
   entry: GraveEntry;
@@ -24,7 +25,9 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
   const [isBurning, setIsBurning] = useState(false);
   const [isHeartbeat, setIsHeartbeat] = useState(false);
   const [errorMsg, setErrorMsg] = useState(''); // For local error toasts
+  const [copySuccess, setCopySuccess] = useState<string | null>(null);
   const lastPayTime = useRef<number>(0);
+  const tombstoneRef = useRef<HTMLDivElement>(null);
 
   // Optimistic UI updates
   const [localRespectsAdded, setLocalRespectsAdded] = useState(0);
@@ -49,7 +52,38 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
       setTimeout(() => setErrorMsg(''), 4000);
   }
 
-  const handleShareToX = () => {
+  const generateTombstoneImage = async (): Promise<boolean> => {
+      if (!tombstoneRef.current) return false;
+
+      try {
+          const canvas = await html2canvas(tombstoneRef.current, {
+              scale: 2,
+              useCORS: true,
+              backgroundColor: '#0a0a0a'
+          });
+
+          const imgBlob = await new Promise<Blob>((resolve) => {
+              canvas.toBlob((blob) => {
+                  resolve(blob as Blob);
+              }, 'image/png');
+          });
+
+          const imgData = [new ClipboardItem({ 'image/png': imgBlob })];
+          await navigator.clipboard.write(imgData);
+
+          setCopySuccess(t('share.image_copied'));
+          setTimeout(() => setCopySuccess(null), 3000);
+
+          return true;
+      } catch (error) {
+          console.error('Failed to generate tombstone image:', error);
+          setCopySuccess(t('share.image_copy_failed'));
+          setTimeout(() => setCopySuccess(null), 3000);
+          return false;
+      }
+  };
+
+  const handleShareToX = async () => {
       const baseUrl = window.location.origin + window.location.pathname;
       const shareUrl = `${baseUrl}?id=${entry.id}`;
       const epitaph = (entry.eulogy?.length > 50) ? entry.eulogy.substring(0, 50) + '...' : (entry.eulogy || '');
@@ -62,6 +96,8 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
       });
       const text = epitaphText + obituaryText;
       const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}&hashtags=GitTomb,IndieDev`;
+
+      await generateTombstoneImage();
       window.open(intent, '_blank');
   };
 
@@ -278,8 +314,17 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
           </div>
       )}
 
+      {/* Copy Success Toast (Floating above tombstone) */}
+      {copySuccess && (
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full w-72 bg-green-900 border border-green-500 text-white text-sm p-3 rounded text-center z-[70] animate-bounce font-pixel shadow-lg">
+              {copySuccess}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-green-500"></div>
+          </div>
+      )}
+
       {/* Main Tombstone */}
-      <div 
+      <div
+        ref={tombstoneRef}
         className={`
           ${baseClasses}
           ${style.container}

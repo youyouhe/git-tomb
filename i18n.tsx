@@ -143,8 +143,11 @@ const translations: Record<Language, Record<string, string>> = {
     "tomb.pay_respects": "Respects Paid",
     "tomb.total_respects": "Tears: {count}",
     "tomb.score": "Soul Power",
-    "tomb.share_btn": "Share Obituary", // NEW
-     "share.obituary": "Here lies {name}. Died of {cause}. It was a good project. R.I.P.", // NEW
+     "tomb.share_btn": "Share Obituary", // NEW
+      "share.obituary": "Here lies {name}. Died of {cause}. It was a good project. R.I.P.", // NEW
+      "share.image_copied": "Image copied to clipboard!", // NEW
+      "share.image_copy_failed": "Copy failed, please try again", // NEW
+
 
     "ritual.candle": "Lighting Candle (+1)",
     "ritual.coffee": "Pouring Coffee (+2)",
@@ -325,8 +328,11 @@ const translations: Record<Language, Record<string, string>> = {
     "tomb.pay_respects": "已完成祭奠",
     "tomb.total_respects": "纸钱: {count}",
     "tomb.score": "阴德值",
-    "tomb.share_btn": "分享讣告", // NEW
-     "share.obituary": "这里躺着 {name}。死于 {cause}。这是一个很好的项目。R.I.P.", // NEW
+     "tomb.share_btn": "分享讣告", // NEW
+      "share.obituary": "这里躺着 {name}。死于 {cause}。这是一个很好的项目。R.I.P.", // NEW
+      "share.image_copied": "图片已复制到剪贴板！", // NEW
+      "share.image_copy_failed": "复制失败，请重试", // NEW
+
 
     "ritual.candle": "点亮心灯 (+1)",
     "ritual.coffee": "倒杯咖啡 (+2)",
