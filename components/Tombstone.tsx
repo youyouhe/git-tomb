@@ -52,13 +52,13 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
   const handleShareToX = () => {
       const baseUrl = window.location.origin + window.location.pathname;
       const shareUrl = `${baseUrl}?id=${entry.id}`;
-      const epitaph = entry.eulogy?.substring(0, 50) || '';
+      const epitaph = (entry.eulogy?.length > 50) ? entry.eulogy.substring(0, 50) + '...' : (entry.eulogy || '');
       const text = t('share.obituary', {
           name: entry.name,
           cause: translateCause,
           epitaph: epitaph
       });
-      const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent('\n\n' + text)}&url=${encodeURIComponent(shareUrl)}&hashtags=GitTomb,IndieDev`;
+      const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent('%0A%0A' + text)}&url=${encodeURIComponent(shareUrl)}&hashtags=GitTomb,IndieDev`;
       window.open(intent, '_blank');
   };
 
