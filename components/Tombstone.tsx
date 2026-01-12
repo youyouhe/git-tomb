@@ -91,56 +91,53 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
       setShowConfirm(true);
   };
 
-  const handleConfirmShare = () => {
-      setShowConfirm(false);
+   const handleConfirmShare = () => {
+       setShowConfirm(false);
 
-      const baseUrl = window.location.origin + window.location.pathname;
-      const shareUrl = `${baseUrl}?id=${entry.id}`;
-      const epitaph = (entry.eulogy?.length > 50) ? entry.eulogy.substring(0, 50) + '...' : (entry.eulogy || '');
+       const baseUrl = window.location.origin + window.location.pathname;
+       const shareUrl = `${baseUrl}?id=${entry.id}`;
+       const epitaph = (entry.eulogy?.length > 50) ? entry.eulogy.substring(0, 50) + '...' : (entry.eulogy || '');
 
-      let text = '';
+       let text = '';
 
-      switch (selectedTemplate) {
-          case 'HUMOR':
-              text = `帮 @${t('share.handle_placeholder')} 收个尸 🪦
-
-项目：${entry.name}
-死因：${translateCause}
-墓志铭："${epitaph}"
-
-愿它安息。`;
-              break;
-          case 'TRIBUTE':
-              text = `致敬 @${t('share.handle_placeholder')} 的遗作 ${entry.name} 😢
-
-虽然只走了很短的路，但让我们永远记住它。
-
-已安葬于 #GitTomb 永久纪念馆`;
-              break;
-          case 'INVITE':
-              text = `@${t('share.handle_placeholder')} 你的 ${entry.name} 被我找到了！
-
-要来给它献花吗？🕯️
-
-#GitTomb #IndieDev`;
-              break;
-          case 'DEFAULT':
-          default:
-              const epitaphText = epitaph ? `${epitaph}
+       switch (selectedTemplate) {
+           case 'HUMOR':
+               text = t('share.template_humor_text', {
+                   handle: t('share.handle_placeholder'),
+                   name: entry.name,
+                   cause: translateCause,
+                   epitaph: epitaph
+               });
+               break;
+           case 'TRIBUTE':
+               text = t('share.template_tribute_text', {
+                   handle: t('share.handle_placeholder'),
+                   name: entry.name
+               });
+               break;
+           case 'INVITE':
+               text = t('share.template_invite_text', {
+                   handle: t('share.handle_placeholder'),
+                   name: entry.name
+               });
+               break;
+           case 'DEFAULT':
+           default:
+               const epitaphText = epitaph ? `${epitaph}
 
 ` : '';
-              const obituaryText = t('share.obituary', {
-                  name: entry.name,
-                  cause: translateCause
-              });
-              text = epitaphText + obituaryText;
-              break;
-      }
+               const obituaryText = t('share.obituary', {
+                   name: entry.name,
+                   cause: translateCause
+               });
+               text = epitaphText + obituaryText;
+               break;
+       }
 
-      const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}&hashtags=GitTomb,IndieDev`;
+       const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}&hashtags=GitTomb,IndieDev`;
 
-      window.open(intent, '_blank');
-  };
+       window.open(intent, '_blank');
+   };
 
   const handleCancelShare = () => {
       setShowConfirm(false);

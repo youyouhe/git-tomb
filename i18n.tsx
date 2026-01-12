@@ -144,23 +144,27 @@ const translations: Record<Language, Record<string, string>> = {
     "tomb.total_respects": "Tears: {count}",
     "tomb.score": "Soul Power",
       "tomb.share_btn": "Share Obituary", // NEW
-       "share.obituary": "Here lies {name}. Died of {cause}. It was a good project. R.I.P.", // NEW
-       "share.image_copied": "Image copied to clipboard!", // NEW
-       "share.image_copy_failed": "Copy failed, please try again", // NEW
-       "share.confirm_title": "Share to X?", // NEW
-       "share.confirm_message": "We will generate a tombstone image and open the X share window.", // NEW
-       "share.confirm_cancel": "Cancel", // NEW
-       "share.confirm_ok": "OK", // NEW
-       "share.handle_placeholder": "dev_handle", // NEW
-       "share.select_template": "Select a share template", // NEW
-       "share.template_default_title": "Default", // NEW
-       "share.template_default_desc": "Standard obituary format", // NEW
-       "share.template_humor_title": "Humor", // NEW
-       "share.template_humor_desc": "Fun & casual tone", // NEW
-       "share.template_tribute_title": "Tribute", // NEW
-       "share.template_tribute_desc": "Respectful & solemn", // NEW
-       "share.template_invite_title": "Invite", // NEW
-       "share.template_invite_desc": "Interactive & engaging", // NEW
+        "share.obituary": "Here lies {name}. Died of {cause}. It was a good project. R.I.P.", // NEW
+        "share.image_copied": "Image copied to clipboard!", // NEW
+        "share.image_copy_failed": "Copy failed, please try again", // NEW
+        "share.confirm_title": "Share to X?", // NEW
+        "share.confirm_message": "We will generate a tombstone image and open X share window.", // NEW
+        "share.confirm_cancel": "Cancel", // NEW
+        "share.confirm_ok": "OK", // NEW
+        "share.handle_placeholder": "dev_handle", // NEW
+        "share.select_template": "Select a share template", // NEW
+        "share.template_default_title": "Default", // NEW
+        "share.template_default_desc": "Standard obituary format", // NEW
+        "share.template_humor_title": "Humor", // NEW
+        "share.template_humor_desc": "Fun & casual tone", // NEW
+        "share.template_tribute_title": "Tribute", // NEW
+        "share.template_tribute_desc": "Respectful & solemn", // NEW
+        "share.template_invite_title": "Invite", // NEW
+        "share.template_invite_desc": "Interactive & engaging", // NEW
+        "share.template_humor_text": "Help @{handle} collect the body 🪦\n\nProject: {name}\nCause: {cause}\nEpitaph: \"{epitaph}\"\n\nRest in peace.", // NEW
+        "share.template_tribute_text": "Paying tribute to @{handle}'s posthumous work {name} 😢\n\nThough it walked a short path, let us remember it forever.\n\nNow interred at #GitTomb Memorial", // NEW
+        "share.template_invite_text": "@{handle}, I found your {name}!\n\nWant to pay respects? 🕯️\n\n#GitTomb #IndieDev", // NEW
+
 
 
 
@@ -343,24 +347,28 @@ const translations: Record<Language, Record<string, string>> = {
     "tomb.pay_respects": "已完成祭奠",
     "tomb.total_respects": "纸钱: {count}",
     "tomb.score": "阴德值",
-     "tomb.share_btn": "分享讣告", // NEW
-      "share.obituary": "这里躺着 {name}。死于 {cause}。这是一个很好的项目。R.I.P.", // NEW
-      "share.image_copied": "图片已复制到剪贴板！", // NEW
-       "share.image_copy_failed": "复制失败，请重试", // NEW
-       "share.confirm_title": "分享到 X？", // NEW
-       "share.confirm_message": "我们将生成墓碑图片并打开 X 分享窗口。", // NEW
-       "share.confirm_cancel": "取消", // NEW
-       "share.confirm_ok": "确定", // NEW
-       "share.handle_placeholder": "dev_handle", // NEW
-       "share.select_template": "选择分享模板", // NEW
-       "share.template_default_title": "默认", // NEW
-       "share.template_default_desc": "标准讣告格式", // NEW
-       "share.template_humor_title": "幽默", // NEW
-       "share.template_humor_desc": "轻松随意的风格", // NEW
-       "share.template_tribute_title": "致敬", // NEW
-       "share.template_tribute_desc": "庄重肃穆的风格", // NEW
-       "share.template_invite_title": "互动", // NEW
-       "share.template_invite_desc": "互动参与式", // NEW
+      "tomb.share_btn": "分享讣告", // NEW
+        "share.obituary": "这里躺着 {name}。死于 {cause}。这是一个很好的项目。R.I.P.", // NEW
+        "share.image_copied": "图片已复制到剪贴板！", // NEW
+        "share.image_copy_failed": "复制失败，请重试", // NEW
+        "share.confirm_title": "分享到 X？", // NEW
+        "share.confirm_message": "我们将生成墓碑图片并打开 X 分享窗口。", // NEW
+        "share.confirm_cancel": "取消", // NEW
+        "share.confirm_ok": "确定", // NEW
+        "share.handle_placeholder": "dev_handle", // NEW
+        "share.select_template": "选择分享模板", // NEW
+        "share.template_default_title": "默认", // NEW
+        "share.template_default_desc": "标准讣告格式", // NEW
+        "share.template_humor_title": "幽默", // NEW
+        "share.template_humor_desc": "轻松随意的风格", // NEW
+        "share.template_tribute_title": "致敬", // NEW
+        "share.template_tribute_desc": "庄重肃穆的风格", // NEW
+        "share.template_invite_title": "互动", // NEW
+        "share.template_invite_desc": "互动参与式", // NEW
+        "share.template_humor_text": "帮 @{handle} 收个尸 🪦\n\n项目：{name}\n死因：{cause}\n墓志铭：\"{epitaph}\"\n\n愿它安息。", // NEW
+        "share.template_tribute_text": "致敬 @{handle} 的遗作 {name} 😢\n\n虽然只走了很短的路，但让我们永远记住它。\n\n已安葬于 #GitTomb 永久纪念馆", // NEW
+        "share.template_invite_text": "@{handle} 你的 {name} 被我找到了！\n\n要来给它献花吗？🕯️\n\n#GitTomb #IndieDev", // NEW
+
 
 
 
