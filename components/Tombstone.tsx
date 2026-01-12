@@ -522,57 +522,48 @@ export const Tombstone: React.FC<TombstoneProps> = ({ entry, onPayRespect, isDet
 
         {/* Share Confirmation Modal */}
         {showConfirm && (
-           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] animate-fade-in">
-              <div className="bg-graveyard-stone border-4 border-graveyard-accent rounded-lg p-8 max-w-lg mx-4 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-                  <h3 className="font-pixel text-2xl text-graveyard-highlight mb-4 text-center">{t('share.confirm_title')}</h3>
-                  <p className="font-mono text-graveyard-text mb-4 text-center leading-relaxed">{t('share.confirm_message')}</p>
+           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] animate-fade-in" onClick={handleCancelShare}>
+              <div className="bg-graveyard-stone border-4 border-graveyard-accent rounded-lg p-8 max-w-lg mx-4 shadow-[0_0_30px_rgba(0,0,0,0.5)] relative" onClick={(e) => e.stopPropagation()}>
+                  <button
+                      onClick={handleCancelShare}
+                      className="absolute -top-3 -right-3 w-8 h-8 bg-graveyard-accent text-graveyard-stone rounded-full flex items-center justify-center font-pixel text-xs hover:bg-graveyard-highlight transition-colors"
+                  >
+                      ✕
+                  </button>
+                   <h3 className="font-pixel text-2xl text-graveyard-highlight mb-4 text-center">{t('share.confirm_title')}</h3>
+                   <p className="font-mono text-graveyard-text mb-4 text-center leading-relaxed">{t('share.confirm_message')}</p>
 
-                  <p className="font-mono text-graveyard-text text-xs mb-2 text-center">{t('share.select_template')}:</p>
-                  <div className="grid grid-cols-2 gap-2 mb-6">
-                      <button
-                          onClick={() => setSelectedTemplate('DEFAULT')}
-                          className={`p-3 text-left border-2 transition-all ${selectedTemplate === 'DEFAULT' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50 hover:bg-graveyard-accent/10'}`}
-                      >
-                          <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_default_title')}</div>
-                          <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_default_desc')}</div>
-                      </button>
-                      <button
-                          onClick={() => setSelectedTemplate('HUMOR')}
-                          className={`p-3 text-left border-2 transition-all ${selectedTemplate === 'HUMOR' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50 hover:bg-graveyard-accent/10'}`}
-                      >
-                          <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_humor_title')}</div>
-                          <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_humor_desc')}</div>
-                      </button>
-                      <button
-                          onClick={() => setSelectedTemplate('TRIBUTE')}
-                          className={`p-3 text-left border-2 transition-all ${selectedTemplate === 'TRIBUTE' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50 hover:bg-graveyard-accent/10'}`}
-                      >
-                          <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_tribute_title')}</div>
-                          <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_tribute_desc')}</div>
-                      </button>
-                      <button
-                          onClick={() => setSelectedTemplate('INVITE')}
-                          className={`p-3 text-left border-2 transition-all ${selectedTemplate === 'INVITE' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50 hover:bg-graveyard-accent/10'}`}
-                      >
-                          <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_invite_title')}</div>
-                          <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_invite_desc')}</div>
-                      </button>
-                  </div>
-
-                  <div className="flex gap-4 justify-center">
-                      <button
-                            onClick={handleCancelShare}
-                            className="px-6 py-3 font-pixel text-sm border-2 border-graveyard-accent bg-transparent text-graveyard-text hover:bg-graveyard-accent/20 transition-colors"
-                      >
-                            {t('share.confirm_cancel')}
-                      </button>
-                      <button
-                            onClick={handleConfirmShare}
-                            className="px-6 py-3 font-pixel text-sm bg-graveyard-highlight text-black hover:bg-graveyard-highlight/80 transition-colors"
-                      >
-                            {t('share.confirm_ok')}
-                      </button>
-                  </div>
+                   <p className="font-mono text-graveyard-text text-xs mb-2 text-center">{t('share.select_template')}:</p>
+                   <div className="grid grid-cols-2 gap-2">
+                       <button
+                           onClick={() => { setSelectedTemplate('DEFAULT'); handleConfirmShare(); }}
+                           className={`p-3 text-left border-2 transition-all hover:bg-graveyard-accent/20 ${selectedTemplate === 'DEFAULT' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50'}`}
+                       >
+                           <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_default_title')}</div>
+                           <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_default_desc')}</div>
+                       </button>
+                       <button
+                           onClick={() => { setSelectedTemplate('HUMOR'); handleConfirmShare(); }}
+                           className={`p-3 text-left border-2 transition-all hover:bg-graveyard-accent/20 ${selectedTemplate === 'HUMOR' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50'}`}
+                       >
+                           <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_humor_title')}</div>
+                           <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_humor_desc')}</div>
+                       </button>
+                       <button
+                           onClick={() => { setSelectedTemplate('TRIBUTE'); handleConfirmShare(); }}
+                           className={`p-3 text-left border-2 transition-all hover:bg-graveyard-accent/20 ${selectedTemplate === 'TRIBUTE' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50'}`}
+                       >
+                           <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_tribute_title')}</div>
+                           <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_tribute_desc')}</div>
+                       </button>
+                       <button
+                           onClick={() => { setSelectedTemplate('INVITE'); handleConfirmShare(); }}
+                           className={`p-3 text-left border-2 transition-all hover:bg-graveyard-accent/20 ${selectedTemplate === 'INVITE' ? 'border-graveyard-highlight bg-graveyard-highlight/20' : 'border-graveyard-accent/50'}`}
+                       >
+                           <div className="font-pixel text-sm text-graveyard-highlight mb-1">{t('share.template_invite_title')}</div>
+                           <div className="font-mono text-xs text-graveyard-text opacity-70">{t('share.template_invite_desc')}</div>
+                       </button>
+                   </div>
               </div>
            </div>
         )}
